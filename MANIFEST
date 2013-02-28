@@ -8,3 +8,4 @@ lib/Novel/Robot/Packer.pm
 lib/Novel/Robot/Packer/Base.pm
 lib/Novel/Robot/Packer/HTML.pm
 lib/Novel/Robot/Packer/TXT.pm
+lib/Novel/Robot/Packer/WordPress.pm
