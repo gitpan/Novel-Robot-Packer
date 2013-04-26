@@ -3,6 +3,7 @@ MANIFEST
 META.yml
 Makefile.PL
 README
+README.md
 dist.ini
 lib/Novel/Robot/Packer.pm
 lib/Novel/Robot/Packer/Base.pm
