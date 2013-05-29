@@ -9,7 +9,7 @@ use ExtUtils::MakeMaker 6.30;
 
 
 my %WriteMakefileArgs = (
-  "ABSTRACT" => "\345\260\217\350\257\264\346\211\223\345\214\205\345\274\225\346\223\216",
+  "ABSTRACT" => "\345\260\217\350\257\264\346\211\223\345\214\205\345\274\225\346\223\216\r",
   "AUTHOR" => "abbypan <abbypan\@gmail.com>",
   "BUILD_REQUIRES" => {},
   "CONFIGURE_REQUIRES" => {
@@ -20,12 +20,26 @@ my %WriteMakefileArgs = (
   "LICENSE" => "perl",
   "NAME" => "Novel::Robot::Packer",
   "PREREQ_PM" => {},
-  "VERSION" => "0.03",
+  "TEST_REQUIRES" => {},
+  "VERSION" => "0.04",
   "test" => {
     "TESTS" => ""
   }
 );
 
+
+unless ( eval { ExtUtils::MakeMaker->VERSION(6.63_03) } ) {
+  my $tr = delete $WriteMakefileArgs{TEST_REQUIRES};
+  my $br = $WriteMakefileArgs{BUILD_REQUIRES};
+  for my $mod ( keys %$tr ) {
+    if ( exists $br->{$mod} ) {
+      $br->{$mod} = $tr->{$mod} if $tr->{$mod} > $br->{$mod};
+    }
+    else {
+      $br->{$mod} = $tr->{$mod};
+    }
+  }
+}
 
 unless ( eval { ExtUtils::MakeMaker->VERSION(6.56) } ) {
   my $br = delete $WriteMakefileArgs{BUILD_REQUIRES};
