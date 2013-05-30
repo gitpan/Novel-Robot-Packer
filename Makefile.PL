@@ -19,9 +19,14 @@ my %WriteMakefileArgs = (
   "EXE_FILES" => [],
   "LICENSE" => "perl",
   "NAME" => "Novel::Robot::Packer",
-  "PREREQ_PM" => {},
+  "PREREQ_PM" => {
+    "HTML::FormatText" => 0,
+    "HTML::TreeBuilder" => 0,
+    "Moo" => 0,
+    "WordPress::XMLRPC" => 0
+  },
   "TEST_REQUIRES" => {},
-  "VERSION" => "0.04",
+  "VERSION" => "0.05",
   "test" => {
     "TESTS" => ""
   }
