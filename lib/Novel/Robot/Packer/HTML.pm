@@ -11,17 +11,17 @@ use IO::File;
 
 sub open_packer {
     my ($self, $index) = @_;
-
-    $self->format_filename("$index->{writer}-$index->{book}.html");
-    $self->{fh} = IO::File->new($self->{filename}, '>:utf8');
+    my $fname = $self->format_filename("$index->{writer}-$index->{book}.html");
+    my $fh = IO::File->new($fname, '>:utf8');
+    return $fh;
 }
 
 sub format_before_index {
-    my ( $self, $index ) = @_;
+    my ( $self,$fh,  $index ) = @_;
     my $title      = "$index->{writer}  《$index->{book}》";
     my $css = $self->generate_css();
     my $index_url  = $index->{index_url} || '';
-$self->{fh}->print(qq[
+$fh->print(qq[
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 
@@ -64,34 +64,40 @@ __CSS__
 } ## end sub read_css
  
 sub format_index {
-    my ( $self, $index ) = @_;
+    my ( $self, $fh, $index ) = @_;
 
     my $toc = '';
     for my $i ( 1 .. $index->{chapter_num} ) {
-        my $u = $index->{chapter_info}[$i]{url};
+        my $r = $index->{chapter_info}[$i-1];
+        my $u = $r->{url};
         next unless ($u);
 
-        my $t = $index->{chapter_info}[$i]{title} || '';
-        $toc .= qq`<li><a href="#toc$i">$t</a></li>\n`;
+        my $t = $r->{title} || '';
+        my $j = sprintf("%03d", $i);
+        $toc .= qq`<p>$j. <a href="#toc$i">$t</a></p>\n`;
     } ## end for my $i ( 1 .. $r->{chapter_num...})
 
-    $toc = qq[<div id="toc"><ol>$toc</ol></div>] if($toc);
-    $self->{fh}->print("$toc\n\n");
+    $toc = qq[<div id="toc">$toc</div>] if($toc);
+    $fh->print("$toc\n\n");
 
 } ## end sub format_index
 
 sub format_before_chapter {
-    my ($self, $index) = @_;
+    my ($self,$fh,  $index) = @_;
 
-    $self->{fh}->print('<div id="content">'."\n\n");
+    $fh->print('<div id="content">'."\n\n");
 }
 
 
 sub format_chapter {
-    my ( $self, $chap , $id) = @_;
+    my ( $self, $fh, $chap , $id) = @_;
+
 
     $chap->{id} ||= $id || 1;
     my $j = sprintf( "%03d# ", $chap->{id});
+    
+    $chap->{title} ||= '[锁]';
+    $chap->{content} ||='';
 
     my $floor = <<__FLOOR__;
 <div class="floor">
@@ -100,20 +106,20 @@ sub format_chapter {
 </div>
 __FLOOR__
 
-    $self->{fh}->print("$floor\n\n");
+    $fh->print("$floor\n\n");
 } ## end sub format_chapter
 
 sub format_after_chapter {
-    my ( $self, $index ) = @_;
+    my ( $self,$fh,  $index ) = @_;
 
-    $self->{fh}->print("</div></body></html>");
+    $fh->print("</div></body></html>");
 }
 
 
 sub close_packer {
-    my ($self, $index) = @_;
+    my ($self,$fh,  $index) = @_;
 
-    $self->{fh}->close;
+    $fh->close;
 }
 
 no Moo;

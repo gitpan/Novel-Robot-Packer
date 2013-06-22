@@ -1,4 +1,21 @@
 # ABSTRACT: 把小说发布到WordPress
+=pod
+
+=encoding utf8
+
+=head1 FUNCTION
+
+=head2 new 初始化
+
+   my $packer = Novel::Robot::Packer::WordPress->new({
+            username => 'someusr',
+            password => 'somepasswd',,
+	    base_url => 'http://www.somewordpress.com',
+	tag => [ '定柔三迷', '古风' ], 
+        category => [ '原创' ], 
+   });
+
+=cut
 package Novel::Robot::Packer::WordPress;
 
 use strict;
@@ -10,12 +27,15 @@ extends 'Novel::Robot::Packer::Base';
 
 use WordPress::XMLRPC;
 use Encode;
+use Encode::Locale;
 
 
 sub BUILD {
     my ( $self ) = @_;
 
     $self->{base_url}=~s#/$##;
+    $self->{tag} ||= [];
+    $self->{category} ||= [];
     
     $self->{wordpress} = WordPress::XMLRPC->new( {   
             username => $self->{usr},
@@ -28,31 +48,29 @@ sub BUILD {
 
 
 sub open_packer {
-    my ($self, $index) = @_;
-    $self->{tags}       = exists $self->{tag} ? [ split ',', $self->{tag} ] : [];
-    $self->{categories} = exists $self->{category} ? [ split ',', $self->{category} ] : [];
+    my ($self, $index_ref) = @_;
+    return $index_ref;
 }
 
 
 sub format_chapter {
-    my ( $self, $c, $i ) = @_;
-    $i ||= $c->{id};
+    my ( $self, $conf, $c, $i ) = @_;
+    my $j = sprintf("%03d", $i || $c->{id});
 
-    my $u = $c->{url};
     my $d = {
-        'title' => qq[$c->{writer} 《$c->{book}》 $i : $c->{title}],
-        'description' => qq[<p>来自：<a href="$u">$u</a></p><p></p>$c->{content}],
+        'title' => qq[$c->{writer} 《$c->{book}》 $j : $c->{title}],
+        'description' => qq[<p>来自：<a href="$c->{url}">$c->{url}</a></p><p></p>$c->{content}],
         'mt_keywords' => [ $c->{writer}, $c->{book} ],
+        'categories' => [], 
     };
+    push @{$d->{mt_keywords}}, @{$self->{tag}} ;
+    $d->{mt_keywords} = join(", ", @{$d->{mt_keywords}});
 
-    push @{ $d->{mt_keywords} }, @{ $self->{tags} } if ( @{ $self->{tags} } );
-    push @{ $d->{categories} }, @{ $self->{categories} } if ( @{ $self->{categories} } );
+    push @{$d->{categories}}, @{$self->{category}} ;
+    $_ = encode('utf8', $_) for @{$d->{categories}};
 
-
-    $d->{$_} = encode('utf8', $d->{$_}) for(qw/title description/);
-    for my $k (qw/mt_keywords categories/){
-        $_ = encode('utf8', $_) for @{$d->{$k}};
-    }
+    my @fields = qw/title description mt_keywords/;
+    $d->{$_} = encode('utf8', $d->{$_}) for @fields;
 
     my $pid = $self->{wordpress}->newPost( $d, 1 );
     my $post_url = "$self->{base_url}/?p=$pid";
