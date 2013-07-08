@@ -9,7 +9,7 @@ use ExtUtils::MakeMaker 6.30;
 
 
 my %WriteMakefileArgs = (
-  "ABSTRACT" => "\345\260\217\350\257\264\346\211\223\345\214\205\345\274\225\346\223\216\r",
+  "ABSTRACT" => "\345\260\217\350\257\264\346\211\223\345\214\205\345\274\225\346\223\216",
   "AUTHOR" => "abbypan <abbypan\@gmail.com>",
   "BUILD_REQUIRES" => {},
   "CONFIGURE_REQUIRES" => {
@@ -26,7 +26,7 @@ my %WriteMakefileArgs = (
     "WordPress::XMLRPC" => 0
   },
   "TEST_REQUIRES" => {},
-  "VERSION" => "0.06",
+  "VERSION" => "0.07",
   "test" => {
     "TESTS" => ""
   }

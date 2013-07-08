@@ -1,5 +1,5 @@
 ---
-abstract: "小说打包引擎\r"
+abstract: '小说打包引擎'
 author:
   - 'abbypan <abbypan@gmail.com>'
 build_requires: {}
@@ -17,4 +17,4 @@ requires:
   HTML::TreeBuilder: 0
   Moo: 0
   WordPress::XMLRPC: 0
-version: 0.06
+version: 0.07
