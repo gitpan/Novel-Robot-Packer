@@ -17,4 +17,4 @@ requires:
   HTML::TreeBuilder: 0
   Moo: 0
   WordPress::XMLRPC: 0
-version: 0.08
+version: 0.09
