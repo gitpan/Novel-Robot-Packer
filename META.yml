@@ -6,7 +6,7 @@ build_requires: {}
 configure_requires:
   ExtUtils::MakeMaker: 6.30
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.300034, CPAN::Meta::Converter version 2.130880'
+generated_by: 'Dist::Zilla version 4.300035, CPAN::Meta::Converter version 2.120921'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -16,5 +16,5 @@ requires:
   HTML::FormatText: 0
   HTML::TreeBuilder: 0
   Moo: 0
-  WordPress::XMLRPC: 0
-version: 0.10
+  XMLRPC::Lite: 0
+version: 0.11

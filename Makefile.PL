@@ -23,10 +23,10 @@ my %WriteMakefileArgs = (
     "HTML::FormatText" => 0,
     "HTML::TreeBuilder" => 0,
     "Moo" => 0,
-    "WordPress::XMLRPC" => 0
+    "XMLRPC::Lite" => 0
   },
   "TEST_REQUIRES" => {},
-  "VERSION" => "0.10",
+  "VERSION" => "0.11",
   "test" => {
     "TESTS" => ""
   }
