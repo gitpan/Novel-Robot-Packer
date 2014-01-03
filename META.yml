@@ -1,20 +1,21 @@
 ---
-abstract: '小说打包引擎'
+abstract: 小说打包引擎
 author:
   - 'abbypan <abbypan@gmail.com>'
 build_requires: {}
 configure_requires:
   ExtUtils::MakeMaker: 6.30
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 4.300035, CPAN::Meta::Converter version 2.120921'
+generated_by: 'Dist::Zilla version 5.008, CPAN::Meta::Converter version 2.120921'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: Novel-Robot-Packer
 requires:
+  EBook::MOBI: 0
   HTML::FormatText: 0
   HTML::TreeBuilder: 0
   Moo: 0
   XMLRPC::Lite: 0
-version: 0.11
+version: 0.12
