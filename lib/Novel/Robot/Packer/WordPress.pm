@@ -25,8 +25,6 @@ use utf8;
 use Moo;
 extends 'Novel::Robot::Packer::Base';
 
-#use WordPress::XMLRPC;
-#use WP::API;
 use XMLRPC::Lite;
 use Encode;
 use Encode::Locale;
@@ -43,13 +41,15 @@ sub open_packer {
 
     my $write_sub = sub {
         my ($d) = @_;
-        push @{$d->{mt_keywords}}, @{$o->{tag}} ;
+        return unless($d);
+
+        push @{$d->{mt_keywords}}, @{$o->{tag}};
         $d->{mt_keywords} = join(", ", @{$d->{mt_keywords}});
 
         my @fields = qw/title description mt_keywords/;
         $d->{$_} = encode('utf8', $d->{$_}) for @fields;
 
-        push @{$d->{categories}}, @{$o->{category}} ;
+        push @{$d->{categories}}, @{$o->{category}};
         $_ = encode('utf8', $_) for @{$d->{categories}};
 
         my $pid = 
@@ -59,7 +59,6 @@ sub open_packer {
 
         return $post_url;
     };
-
 
     return ($write_sub, \$o->{base_url});
 }

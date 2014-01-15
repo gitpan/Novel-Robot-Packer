@@ -100,6 +100,7 @@ sub format_chapter {
 <div class="flcontent">$chap->{content}</div>
 </div>
 __FLOOR__
+    $floor=~s#<[/\s]*br\s*>#<br/>#gs;
 
     return $floor;
 } ## end sub format_chapter

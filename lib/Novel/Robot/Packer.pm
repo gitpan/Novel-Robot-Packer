@@ -29,9 +29,9 @@ use Moo;
 use Novel::Robot::Packer::TXT;
 use Novel::Robot::Packer::HTML;
 use Novel::Robot::Packer::WordPress;
-use Novel::Robot::Packer::MOBI;
+use Novel::Robot::Packer::Markdown;
 
-our $VERSION = 0.12;
+our $VERSION = 0.13;
 
 sub init_packer {
     my ( $self, $site , $opt) = @_;
@@ -39,6 +39,7 @@ sub init_packer {
     my $packer = eval qq[new Novel::Robot::Packer::$site($s)];
     return $packer;
 }
+
 
 no Moo;
 1;

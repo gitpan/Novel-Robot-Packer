@@ -114,5 +114,22 @@ sub format_before_chapter { }
 sub format_chapter { }
 sub format_after_chapter { }
 
+sub pack_book {
+    my ($self, $index_ref, $o) =@_;
+
+    my ( $w_sub, $end_sub ) = $self->open_packer( $index_ref, $o );
+
+    $self->write_packer( $w_sub, $self->format_before_index($index_ref) );
+    $self->write_packer( $w_sub, $self->format_index($index_ref) );
+    $self->write_packer( $w_sub, $self->format_before_chapter($index_ref) );
+    for my $chap_r (@{$index_ref->{chapter_info}}){
+        $self->write_packer( $w_sub, $self->format_chapter($chap_r) );
+    }
+    $self->write_packer( $w_sub, $self->format_after_chapter($index_ref) );
+
+    return $end_sub->() if($end_sub and ref($end_sub) eq 'CODE');
+    return $end_sub;
+}
+
 no Moo;
 1;
