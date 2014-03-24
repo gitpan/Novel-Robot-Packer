@@ -1,45 +1,68 @@
 # ABSTRACT: 小说打包引擎
+
 =pod
 
 =encoding utf8
 
 =head1 支持输出类型
 
-    TXT  : txt形式的小说
+    txt  : txt形式的小说
 
-    HTML : 网页形式的小说
+    html : 网页形式的小说
 
-    WordPress : 将小说发布到WordPress空间
+    wordpress : 将小说发布到WordPress空间
 
 =head1 FUNCTION
 
-=head2 init_packer 初始化解析模块
+=head2 new 初始化解析模块
 
-   my $packer = Novel::Robot::Packer->new();
+   my $packer = Novel::Robot::Packer->new(type => 'html');
 
-   my $pack_type = 'HTML';
-
-   $packer->init_packer($pack_type);
+=head2 打包文件
+   
+   my $ret = $self->main($book_ref, 
+       with_toc => 1, 
+   );
 
 =cut
+
+package  Novel::Robot::Packer;
 use strict;
 use warnings;
-package  Novel::Robot::Packer;
-use Moo;
-use Novel::Robot::Packer::TXT;
-use Novel::Robot::Packer::HTML;
-use Novel::Robot::Packer::WordPress;
-use Novel::Robot::Packer::Markdown;
+use Encode::Locale;
+use Encode;
 
-our $VERSION = 0.13;
+our $VERSION = 0.14;
 
-sub init_packer {
-    my ( $self, $site , $opt) = @_;
-    my $s = $opt?'%$opt':'';
-    my $packer = eval qq[new Novel::Robot::Packer::$site($s)];
-    return $packer;
+sub new {
+    my ( $self, %opt ) = @_;
+    $opt{type} ||= 'html';
+    my $module = "Novel::Robot::Packer::$opt{type}";
+    eval "require $module;";
+    bless {%opt}, $module;
 }
 
+sub format_book_output {
+    my ( $self, $bk, $o ) = @_;
+    if ( ! $o->{output} ) {
+        my $html = '';
+        $o->{output} =
+          exists $o->{output_scalar}
+          ? \$html
+          : $self->format_default_filename($bk, $o);
+    }
+    return $o->{output};
+}
 
-no Moo;
+sub format_default_filename {
+    my ( $self, $r, $o) = @_;
+    my $f =  "$r->{writer}-$r->{book}." . $self->suffix();
+    $f =~ s{[\[\]/><\\`;'\$^*\(\)\%#@!"&:\?|\s^,~]}{}g;
+    return encode( locale => $f );
+}
+
+sub suffix {
+    return '';
+}
+
 1;
