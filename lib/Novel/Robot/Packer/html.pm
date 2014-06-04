@@ -21,9 +21,9 @@ sub process_template {
     my ($self, $book, %opt) = @_;
 
     my $toc = $opt{with_toc} ? qq{<div id="toc"><ul>
-    [% FOREACH r IN chapter_info %]
+    [% FOREACH r IN floor_list %]
     [% IF r.content %]
-    <li>[% r.id %]. <a href="#toc[% r.id %]">[% r.title %]</a></li>
+    <li>[% r.id %]. <a href="#toc[% r.id %]">[% r.writer %] [% r.title %]</a></li>
     [% END %]
     [% END %]
     </ul>
@@ -44,7 +44,7 @@ body {
 	text-indent: 2em;
 	line-height: 145%;
 }
-#title, .fltitle {
+#title, .chapter {
 	border-bottom: 0.2em solid #ee9b73;
 	margin: 0.8em 0.2em 0.8em 0.2em;
 	text-indent: 0em;
@@ -58,17 +58,15 @@ body {
         </head>
 
         <body>
-        <div id="title"><a href="[% url %]">[% writer %] 《 [% book %] 》</a></div>
+        <div id="title"><a href="[% writer_url %]">[% writer %]</a> 《 <a href="[% url %]">[% book %]</a> 》</div>
         $toc
 <div id="content">
-    [% FOREACH r IN chapter_info %]
+    [% FOREACH r IN floor_list %]
     [% IF r.content %]
 <div class="floor">
-<div class="fltitle">[% r.id %]. <a name="toc[% r.id %]">[% r.title %]</a></div>
-<div class="flcontent">[% r.content %]</div>
-</div>
-    [% END %]
-    [% END %]
+<div class="chapter">[% r.id %]. <a name="toc[% r.id %]">[% r.writer %] [% r.title %]</a>  [% r.time %]</div>
+<div class="content">[% r.content %]</div>
+</div>[% END %][% END %]
 </div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-package Novel::Robot::Packer::markdown;
+package Novel::Robot::Packer::jekyll;
 use strict;
 use warnings;
 use utf8;
@@ -16,7 +16,7 @@ sub main {
     my ($self, $bk, %opt) = @_;
 
     $self->{formatter} = HTML::FormatText->new() ;
-    $self->tidy_content($_) for @{$bk->{chapter_info}};
+    $self->tidy_content($_) for @{$bk->{floor_list}};
 
     $self->process_template($bk, %opt);
     return $opt{output};
@@ -38,14 +38,32 @@ sub tidy_content {
 
 sub process_template {
     my ($self, $bk, %opt) = @_;
-    my $txt = 
-qq{# [[% writer %]]([% writer_url %])《 [[% book %]]([% index_url %]) 》
+    $opt{category} ||= "";
+    $opt{tag} ||= [];
+    $opt{remark} ||= "";
 
-[% FOREACH r IN chapter_info %]- \[[% r.title %]\](#chap[% r.id %])
+    push @{$opt{tag}} , ($bk->{writer}, $bk->{book});
+    my $tag = join(", ", map { qq/"$_"/ } @{$opt{tag}});
+
+    my $title = $opt{title} || "$bk->{writer} 《$bk->{book}》";
+    my $txt = 
+qq{---
+layout: post
+category: "$opt{category}"
+title:  $title
+tagline: "$opt{remark}"
+tags: [ $tag ] 
+---
+
+{% include JB/setup %}
+
+# [[% writer %]]([% writer_url %])《 [[% book %]]([% index_url %]) 》
+
+[% FOREACH r IN floor_list %]- \[[% r.writer %] [% r.title %]\](#chap[% r.id %])
 [% END %]
 
-[% FOREACH r IN chapter_info %]
-<h1 id="chap[% r.id %]">  [% r.id %] [% r.title %]  </h1>\n\n
+[% FOREACH r IN floor_list %]
+<h1 id="chap[% r.id %]">  [% r.id %] [% r.writer %] [% r.title %] [% r.time %] </h1>\n\n
 [% r.content %]
 [% END %]
     };
