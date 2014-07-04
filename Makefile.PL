@@ -10,7 +10,7 @@ use ExtUtils::MakeMaker 6.30;
 
 
 my %WriteMakefileArgs = (
-  "ABSTRACT" => "\345\260\217\350\257\264\346\211\223\345\214\205\345\274\225\346\223\216",
+  "ABSTRACT" => "pack novel/bbs content to txt / html / jekyll / wordpress, etc",
   "AUTHOR" => "abbypan <abbypan\@gmail.com>",
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30"
@@ -25,7 +25,7 @@ my %WriteMakefileArgs = (
     "HTML::TreeBuilder" => 0,
     "XMLRPC::Lite" => 0
   },
-  "VERSION" => "0.15",
+  "VERSION" => "0.16",
   "test" => {
     "TESTS" => ""
   }

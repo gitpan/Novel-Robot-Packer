@@ -1,12 +1,12 @@
 ---
-abstract: "å°\x8Fè¯´æ\x89\x93å\x8C\Nå¼\x95æ\x93\x8E"
+abstract: 'pack novel/bbs content to txt / html / jekyll / wordpress, etc'
 author:
   - 'abbypan <abbypan@gmail.com>'
 build_requires: {}
 configure_requires:
   ExtUtils::MakeMaker: '6.30'
 dynamic_config: 0
-generated_by: 'Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.141520'
+generated_by: 'Dist::Zilla version 5.019, CPAN::Meta::Converter version 2.140640'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -17,4 +17,4 @@ requires:
   HTML::FormatText: '0'
   HTML::TreeBuilder: '0'
   XMLRPC::Lite: '0'
-version: '0.15'
+version: '0.16'
